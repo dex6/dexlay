@@ -1,0 +1,20 @@
+Note: this is very dirty hack... It should be probably done in some better way.
+
+diff --git a/src/syscall.h b/src/syscall.h
+index a2da030..88cc633 100644
+--- a/src/syscall.h
++++ b/src/syscall.h
+@@ -4,8 +4,13 @@
+ #define _SYMSTR(str)	#str
+ #define SYMSTR(str)	_SYMSTR(str)
+ 
++#if !defined(__UCLIBC__)
+ #define SYMVER(compat_sym, orig_sym, ver_sym)	\
+ 	__asm__(".symver " SYMSTR(compat_sym) "," SYMSTR(orig_sym) "@LIBAIO_" SYMSTR(ver_sym));
++#else
++/* disable symbol versioning when libc does not support them */
++#define SYMVER(compat_sym, orig_sym, ver_sym)
++#endif
+ 
+ #define DEFSYMVER(compat_sym, orig_sym, ver_sym)	\
+ 	__asm__(".symver " SYMSTR(compat_sym) "," SYMSTR(orig_sym) "@@LIBAIO_" SYMSTR(ver_sym));
