@@ -56,6 +56,7 @@ PATCHES=(
 
 src_prepare() {
 	use elibc_musl && append-ldflags -lrpmatch
+	use elibc_uclibc && append-ldflags -lintl
 	default
 	eautoreconf
 }
